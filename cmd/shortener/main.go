@@ -3,9 +3,14 @@ package main
 import (
 	"log"
 	"net/http"
+	"net/url"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	uri, err := url.ParseRequestURI(r.RequestURI)
+	if err != nil {
+		w.WriteHeader(400)
+	}
 	if r.Method == "POST" {
 		w.WriteHeader(201)
 	} else {
