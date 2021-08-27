@@ -1,13 +1,16 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+	if r.Method == "POST" {
+		w.WriteHeader(201)
+	} else {
+		w.WriteHeader(200)
+	}
 }
 
 func main() {
