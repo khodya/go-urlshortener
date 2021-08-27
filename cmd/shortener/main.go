@@ -14,7 +14,7 @@ func fold(c *gin.Context) {
 		c.Status(400)
 		return
 	}
-	c.IndentedJSON(http.StatusCreated, "https://www.yandex.com")
+	c.IndentedJSON(http.StatusCreated, url)
 }
 
 func unfold(c *gin.Context) {
