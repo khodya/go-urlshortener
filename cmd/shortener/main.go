@@ -1,24 +1,23 @@
 package main
 
 import (
-	"log"
 	"net/http"
-	"net/url"
+
+	"github.com/gin-gonic/gin"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	_, err := url.Parse(r.URL.String())
-	if err != nil {
-		w.WriteHeader(400)
-	}
-	if r.Method == "POST" {
-		w.WriteHeader(201)
-	} else {
-		w.WriteHeader(200)
-	}
+func fold(c *gin.Context) {
+	c.IndentedJSON(http.StatusAccepted, nil)
+}
+
+func unfold(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, nil)
 }
 
 func main() {
-	http.HandleFunc("/", handler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	router := gin.Default()
+	router.GET("/:id", unfold)
+	router.POST("/", fold)
+
+	router.Run("localhost:8080")
 }
