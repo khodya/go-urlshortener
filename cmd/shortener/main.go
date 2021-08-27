@@ -29,7 +29,7 @@ func unfold(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
-	router.GET("/:id/*action", unfold)
+	router.GET("/:id", unfold)
 	router.POST("/", fold)
 
 	router.Run("localhost:8080")
