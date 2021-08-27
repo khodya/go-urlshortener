@@ -22,7 +22,7 @@ func unfold(c *gin.Context) {
 	// if err != nil {
 	// 	c.IndentedJSON(http.StatusBadRequest, url)
 	// }
-	c.Header("Location", "https://www.yandex.com")
+	c.Header("Location", "http://058wf28m7uqg.net")
 	c.Status(http.StatusTemporaryRedirect)
 }
 
