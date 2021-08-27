@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,10 +14,15 @@ func fold(c *gin.Context) {
 		c.Status(400)
 		return
 	}
-	c.IndentedJSON(http.StatusCreated, url)
+	c.IndentedJSON(http.StatusCreated, "https://www.yandex.com")
 }
 
 func unfold(c *gin.Context) {
+	id := c.Param("id")
+	url, err := url.Parse(id)
+	if err != nil || url.Scheme == "" {
+		c.IndentedJSON(http.StatusBadRequest, url)
+	}
 	c.Header("Location", "https://www.yandex.com")
 	c.Status(http.StatusTemporaryRedirect)
 }
