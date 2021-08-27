@@ -7,7 +7,7 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	_, err := url.ParseRequestURI(r.RequestURI)
+	_, err := url.Parse(r.URL.String())
 	if err != nil {
 		w.WriteHeader(400)
 	}
