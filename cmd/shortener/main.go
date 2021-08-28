@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/base64"
 	"io/ioutil"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,16 +15,16 @@ func fold(c *gin.Context) {
 		c.Status(400)
 		return
 	}
-	c.String(http.StatusCreated, "http://localhost:8080/asdfghj3453jhg3")
+	c.String(http.StatusCreated, "http://localhost:8080/%s", base64.StdEncoding.EncodeToString(url))
 }
 
 func unfold(c *gin.Context) {
-	// id := c.Param("id")
-	// url, err := url.Parse(id)
-	// if err != nil {
-	// 	c.IndentedJSON(http.StatusBadRequest, url)
-	// }
-	c.Header("Location", "http://058wf28m7uqg.net")
+	id := c.Param("id")
+	url, err := base64.StdEncoding.DecodeString(id)
+	if err != nil {
+		c.String(http.StatusBadRequest, "Bad id parameter:%s", id)
+	}
+	c.Header("Location", string(url))
 	c.Status(http.StatusTemporaryRedirect)
 }
 
