@@ -1,4 +1,4 @@
-package app
+package router
 
 import (
 	"net/http"
@@ -6,19 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-	r.GET("/:id", Unfold)
-	r.POST("/", Fold)
-	return r
-}
-
 func TestFold(t *testing.T) {
-	router := setupRouter()
+	router := SetupRouter()
 
 	type want struct {
 		code int
@@ -67,7 +59,7 @@ func TestFold(t *testing.T) {
 }
 
 func TestUnfold(t *testing.T) {
-	router := setupRouter()
+	router := SetupRouter()
 
 	type want struct {
 		code int
