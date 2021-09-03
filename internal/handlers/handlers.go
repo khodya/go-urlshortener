@@ -42,7 +42,7 @@ func Shorten(c *gin.Context) {
 		return
 	}
 	var requestBody myRequestBody
-	if err := json.Unmarshal(body, &requestBody); err != nil {
+	if err := json.Unmarshal(body, &requestBody); err != nil || len(requestBody.URLText) == 0 {
 		c.Status(400)
 		return
 	}

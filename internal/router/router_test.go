@@ -96,3 +96,55 @@ func TestUnfold(t *testing.T) {
 		})
 	}
 }
+
+func TestShorten(t *testing.T) {
+	router := SetupRouter()
+
+	type want struct {
+		code int
+		body string
+	}
+	tests := []struct {
+		name string
+		want want
+	}{
+		{
+			name: "Shorten. Happy",
+			want: want{
+				code: 201,
+				body: "{\"url\": \"https://yandex.ru\"}",
+			},
+		},
+		{
+			name: "Shorten. Empty JSON",
+			want: want{
+				code: 400,
+				body: "{}",
+			},
+		},
+		{
+			name: "Shorten. Empty request body",
+			want: want{
+				code: 400,
+				body: "",
+			},
+		},
+		{
+			name: "Shorten. Invalid JSON",
+			want: want{
+				code: 400,
+				body: "{\"url\": https://yandex.ru\"}",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			w := httptest.NewRecorder()
+			req, _ := http.NewRequest("POST", "/api/shorten", strings.NewReader(tt.want.body))
+			router.ServeHTTP(w, req)
+
+			assert.Equal(t, tt.want.code, w.Code)
+		})
+	}
+}
