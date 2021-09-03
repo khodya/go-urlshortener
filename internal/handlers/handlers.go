@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -9,8 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type shortenBody struct {
-	Url string `json:"url"`
+type myRequestBody struct {
+	UrlText string `json:"url"`
 }
 
 func Fold(c *gin.Context) {
@@ -34,14 +35,21 @@ func Unfold(c *gin.Context) {
 }
 
 func Shorten(c *gin.Context) {
-	var body shortenBody
-	if err := c.BindJSON(&body); err != nil {
-		c.String(http.StatusBadRequest, "Bad request body")
+	defer c.Request.Body.Close()
+	body, err := io.ReadAll(c.Request.Body)
+	if err != nil || len(body) == 0 {
+		c.Status(400)
+		return
+	}
+	var requestBody myRequestBody
+	if err := json.Unmarshal(body, &requestBody); err != nil {
+		c.Status(400)
+		return
 	}
 	response := struct {
 		Result string `json:"result"`
 	}{
-		Result: fmt.Sprintf("http://localhost:8080/%s", base64.StdEncoding.EncodeToString([]byte(body.Url))),
+		Result: fmt.Sprintf("http://localhost:8080/%s", base64.StdEncoding.EncodeToString([]byte(requestBody.UrlText))),
 	}
 	c.IndentedJSON(http.StatusCreated, response)
 }
