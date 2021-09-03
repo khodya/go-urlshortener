@@ -2,11 +2,16 @@ package handlers
 
 import (
 	"encoding/base64"
+	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+type shortenBody struct {
+	Url string `json:"url"`
+}
 
 func Fold(c *gin.Context) {
 	defer c.Request.Body.Close()
@@ -26,4 +31,17 @@ func Unfold(c *gin.Context) {
 	}
 	c.Header("Location", string(url))
 	c.Status(http.StatusTemporaryRedirect)
+}
+
+func Shorten(c *gin.Context) {
+	var body shortenBody
+	if err := c.BindJSON(&body); err != nil {
+		c.String(http.StatusBadRequest, "Bad request body")
+	}
+	response := struct {
+		Result string `json:"result"`
+	}{
+		Result: fmt.Sprintf("http://localhost:8080/%s", base64.StdEncoding.EncodeToString([]byte(body.Url))),
+	}
+	c.IndentedJSON(http.StatusCreated, response)
 }
