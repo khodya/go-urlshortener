@@ -1,6 +1,7 @@
 package router
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -146,6 +147,11 @@ func TestShorten(t *testing.T) {
 
 			assert.Equal(t, tt.want.code, w.Code)
 			assert.Equal(t, "application/json; charset=utf-8", w.Result().Header.Get("Content-Type"))
+
+			// assert response is a valid JSON
+			var js json.RawMessage
+			assert.Nil(t, json.Unmarshal(w.Body.Bytes(), &js))
+
 		})
 	}
 }

@@ -37,14 +37,13 @@ func Unfold(c *gin.Context) {
 func Shorten(c *gin.Context) {
 	defer c.Request.Body.Close()
 	body, err := io.ReadAll(c.Request.Body)
-	c.Header("Content-Type", "application/json; charset=utf-8")
 	if err != nil || len(body) == 0 {
-		c.Status(400)
+		c.JSON(http.StatusBadRequest, struct{}{})
 		return
 	}
 	var requestBody myRequestBody
 	if err := json.Unmarshal(body, &requestBody); err != nil || len(requestBody.URLText) == 0 {
-		c.Status(400)
+		c.JSON(http.StatusBadRequest, struct{}{})
 		return
 	}
 	response := struct {
