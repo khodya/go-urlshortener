@@ -146,10 +146,9 @@ func TestShorten(t *testing.T) {
 			router.ServeHTTP(w, req)
 
 			assert.Equal(t, tt.want.code, w.Code)
-			assert.Equal(t, "application/json; charset=utf-8", w.Result().Header.Get("Content-Type"))
+			assert.Equal(t, "application/json; charset=utf-8", w.Header().Get("Content-Type"))
 
 			// assert response is a valid JSON
-			defer w.Result().Body.Close()
 			var js json.RawMessage
 			assert.Nil(t, json.Unmarshal(w.Body.Bytes(), &js))
 		})
