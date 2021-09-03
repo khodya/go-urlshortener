@@ -37,6 +37,7 @@ func Unfold(c *gin.Context) {
 func Shorten(c *gin.Context) {
 	defer c.Request.Body.Close()
 	body, err := io.ReadAll(c.Request.Body)
+	c.Header("Content-Type", "application/json; charset=utf-8")
 	if err != nil || len(body) == 0 {
 		c.Status(400)
 		return

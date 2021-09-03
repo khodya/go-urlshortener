@@ -145,6 +145,7 @@ func TestShorten(t *testing.T) {
 			router.ServeHTTP(w, req)
 
 			assert.Equal(t, tt.want.code, w.Code)
+			assert.Equal(t, "application/json; charset=utf-8", w.Result().Header.Get("Content-Type"))
 		})
 	}
 }
