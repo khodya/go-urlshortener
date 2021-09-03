@@ -11,7 +11,7 @@ import (
 )
 
 type myRequestBody struct {
-	UrlText string `json:"url"`
+	URLText string `json:"url"`
 }
 
 func Fold(c *gin.Context) {
@@ -49,7 +49,7 @@ func Shorten(c *gin.Context) {
 	response := struct {
 		Result string `json:"result"`
 	}{
-		Result: fmt.Sprintf("http://localhost:8080/%s", base64.StdEncoding.EncodeToString([]byte(requestBody.UrlText))),
+		Result: fmt.Sprintf("http://localhost:8080/%s", base64.StdEncoding.EncodeToString([]byte(requestBody.URLText))),
 	}
 	c.IndentedJSON(http.StatusCreated, response)
 }
