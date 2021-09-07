@@ -44,7 +44,7 @@ func Fold(c *gin.Context) {
 	}
 	resultUrl := baseUrl
 	resultUrl.Path = shortener.Encode(url)
-	c.String(http.StatusCreated, "%s", resultUrl)
+	c.String(http.StatusCreated, "%s", resultUrl.String())
 	fmt.Printf("Base URL: %s\n", &baseUrl)
 }
 
