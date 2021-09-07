@@ -17,22 +17,22 @@ type myRequestBody struct {
 }
 
 const (
-	BASE_URL_ENV_NAME = "BASE_URL"
-	DEFAULT_BASE_URL  = "http://localhost:8080"
+	BaseUrlEnvName = "BASE_URL"
+	DefaultBaseUrl = "http://localhost:8080"
 )
 
-var baseUrl url.URL
+var baseURL url.URL
 
 func init() {
-	baseUrl = parseBaseUrl()
+	baseURL = parseBaseURL()
 }
 
-func parseBaseUrl() url.URL {
-	baseUrl, err := url.Parse(os.Getenv(BASE_URL_ENV_NAME))
-	if err != nil || (*baseUrl == url.URL{}) {
-		baseUrl, _ = url.Parse(DEFAULT_BASE_URL)
+func parseBaseURL() url.URL {
+	baseURL, err := url.Parse(os.Getenv(BaseUrlEnvName))
+	if err != nil || (*baseURL == url.URL{}) {
+		baseURL, _ = url.Parse(DefaultBaseUrl)
 	}
-	return *baseUrl
+	return *baseURL
 }
 
 func Fold(c *gin.Context) {
@@ -42,10 +42,10 @@ func Fold(c *gin.Context) {
 		c.Status(400)
 		return
 	}
-	resultUrl := baseUrl
-	resultUrl.Path = shortener.Encode(url)
-	c.String(http.StatusCreated, "%s", resultUrl.String())
-	fmt.Printf("Base URL: %s\n", &baseUrl)
+	resultURL := baseURL
+	resultURL.Path = shortener.Encode(url)
+	c.String(http.StatusCreated, "%s", resultURL.String())
+	fmt.Printf("Base URL: %s\n", &baseURL)
 }
 
 func Unfold(c *gin.Context) {
@@ -70,11 +70,11 @@ func Shorten(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, struct{}{})
 		return
 	}
-	resultUrl := baseUrl
-	resultUrl.Path = shortener.Encode([]byte(requestBody.URLText))
+	resultURL := baseURL
+	resultURL.Path = shortener.Encode([]byte(requestBody.URLText))
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
 	}{
-		Result: resultUrl.String(),
+		Result: resultURL.String(),
 	})
 }
