@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -45,7 +44,6 @@ func Fold(c *gin.Context) {
 	resultURL := baseURL
 	resultURL.Path = shortener.Encode(url)
 	c.String(http.StatusCreated, "%s", resultURL.String())
-	fmt.Printf("Base URL: %s\n", &baseURL)
 }
 
 func Unfold(c *gin.Context) {
