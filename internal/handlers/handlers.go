@@ -17,8 +17,8 @@ type myRequestBody struct {
 }
 
 const (
-	BaseUrlEnvName = "BASE_URL"
-	DefaultBaseUrl = "http://localhost:8080"
+	BaseURLEnvName = "BASE_URL"
+	DefaultBaseURL = "http://localhost:8080"
 )
 
 var baseURL url.URL
@@ -28,9 +28,9 @@ func init() {
 }
 
 func parseBaseURL() url.URL {
-	baseURL, err := url.Parse(os.Getenv(BaseUrlEnvName))
+	baseURL, err := url.Parse(os.Getenv(BaseURLEnvName))
 	if err != nil || (*baseURL == url.URL{}) {
-		baseURL, _ = url.Parse(DefaultBaseUrl)
+		baseURL, _ = url.Parse(DefaultBaseURL)
 	}
 	return *baseURL
 }
