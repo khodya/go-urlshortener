@@ -31,6 +31,6 @@ func Encode(v []byte) string {
 	return url.String()
 }
 
-func Decode(URLPath string) ([]byte, error) {
-	return base64.StdEncoding.DecodeString(URLPath)
+func Decode(v string) ([]byte, error) {
+	return base64.StdEncoding.DecodeString(v)
 }

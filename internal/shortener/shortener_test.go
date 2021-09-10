@@ -50,8 +50,8 @@ func TestEncode(t *testing.T) {
 }
 
 func TestDecode(t *testing.T) {
-	myUrl := "https://yandex.com"
-	encodedURL := Encode([]byte(myUrl))
+	myURL := "https://yandex.com"
+	encodedURL := Encode([]byte(myURL))
 
 	parsedEncodedURL, _ := url.Parse(encodedURL)
 	pathParameter := strings.Replace(parsedEncodedURL.Path, "/", "", 1)
@@ -59,7 +59,7 @@ func TestDecode(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotEmpty(t, decodedURL)
-	assert.Equal(t, myUrl, string(decodedURL))
+	assert.Equal(t, myURL, string(decodedURL))
 }
 
 func TestParseBaseURL(t *testing.T) {
