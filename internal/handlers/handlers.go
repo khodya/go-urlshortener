@@ -44,7 +44,7 @@ func Fold(c *gin.Context) {
 	}
 	path := shortener.Encode(url)
 	shortURL := composeURL(baseURL, path)
-	storage.Put(path, c.Request.RequestURI)
+	storage.Put(path, c.Request.URL.String())
 	c.String(http.StatusCreated, "%s", shortURL)
 }
 
@@ -77,7 +77,7 @@ func Shorten(c *gin.Context) {
 	}
 	path := shortener.Encode([]byte(requestBody.URLText))
 	shortURL := composeURL(baseURL, path)
-	storage.Put(path, c.Request.RequestURI)
+	storage.Put(path, c.Request.URL.String())
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
 	}{
