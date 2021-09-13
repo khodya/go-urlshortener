@@ -85,6 +85,13 @@ func TestUnfold(t *testing.T) {
 				url:  "/aHR0cHM6Ly93d3cueWFuZGLmNvbQ==",
 			},
 		},
+		{
+			name: "happy. multi-level path",
+			want: want{
+				code: 404,
+				url:  "/aHR0cHM6Ly93d3cueWFuZGV4LmNvbQ==/aHR0cHM6Ly93d3cueWFuZGV4LmNvbQ==",
+			},
+		},
 	}
 
 	for _, tt := range tests {
