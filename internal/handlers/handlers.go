@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"net/url"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/khodya/go-urlshortener/internal/shortener"
@@ -20,20 +18,6 @@ const (
 	DefaultBaseURL = "http://localhost:8080"
 )
 
-var baseURL url.URL
-
-func init() {
-	baseURL = parseBaseURL()
-}
-
-func parseBaseURL() url.URL {
-	baseURL, err := url.Parse(os.Getenv(BaseURLEnvName))
-	if err != nil || (*baseURL == url.URL{}) {
-		baseURL, _ = url.Parse(DefaultBaseURL)
-	}
-	return *baseURL
-}
-
 func Fold(c *gin.Context) {
 	defer c.Request.Body.Close()
 	url, err := io.ReadAll(c.Request.Body)
@@ -41,8 +25,7 @@ func Fold(c *gin.Context) {
 		c.Status(400)
 		return
 	}
-	shortURL := composeURL(baseURL, shortener.Encode(url))
-	c.String(http.StatusCreated, "%s", shortURL)
+	c.String(http.StatusCreated, "%s", shortener.Encode(url))
 }
 
 func Unfold(c *gin.Context) {
@@ -67,16 +50,9 @@ func Shorten(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, struct{}{})
 		return
 	}
-	shortURL := shortener.Encode([]byte(requestBody.URLText))
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
 	}{
-		Result: shortURL,
+		Result: shortener.Encode([]byte(requestBody.URLText)),
 	})
-}
-
-func composeURL(baseURL url.URL, path string) string {
-	url := baseURL
-	url.Path = path
-	return url.String()
 }
