@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/khodya/go-urlshortener/internal/shortener"
+	"github.com/khodya/go-urlshortener/internal/storage"
 )
 
 type myRequestBody struct {
@@ -41,17 +42,24 @@ func Fold(c *gin.Context) {
 		c.Status(400)
 		return
 	}
-	shortURL := composeURL(baseURL, shortener.Encode(url))
+	path := shortener.Encode(url)
+	shortURL := composeURL(baseURL, path)
+	storage.Put(path, shortURL)
 	c.String(http.StatusCreated, "%s", shortURL)
 }
 
 func Unfold(c *gin.Context) {
 	id := c.Param("id")
-	url, err := shortener.Decode(id)
-	if err != nil {
-		c.String(http.StatusBadRequest, "Bad id parameter:%s", id)
+	decodedURL, ok := storage.Get(id)
+	if !ok {
+		url, err := shortener.Decode(id)
+		if err != nil {
+			c.String(http.StatusBadRequest, "Bad id parameter:%s", id)
+		}
+		decodedURL = string(url)
 	}
-	c.Header("Location", string(url))
+
+	c.Header("Location", decodedURL)
 	c.Status(http.StatusTemporaryRedirect)
 }
 
@@ -67,7 +75,9 @@ func Shorten(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, struct{}{})
 		return
 	}
-	shortURL := composeURL(baseURL, shortener.Encode([]byte(requestBody.URLText)))
+	path := shortener.Encode([]byte(requestBody.URLText))
+	shortURL := composeURL(baseURL, path)
+	storage.Put(path, shortURL)
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
 	}{
