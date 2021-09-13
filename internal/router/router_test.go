@@ -79,6 +79,13 @@ func TestUnfold(t *testing.T) {
 			},
 		},
 		{
+			name: "happy. multi-level path",
+			want: want{
+				code: 307,
+				url:  "/aHR0cHM6Ly93d3cueWFuZGV4LmNvbQ==/aHR0cHM6Ly93d3cueWFuZGV4LmNvbQ==",
+			},
+		},
+		{
 			name: "unhappy. unfold",
 			want: want{
 				code: 400,
