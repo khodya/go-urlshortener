@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"net/http"
 	"os"
 	"time"
@@ -8,12 +9,15 @@ import (
 	"github.com/khodya/go-urlshortener/internal/router"
 )
 
+var serverAddress string
+
+func init() {
+	flag.StringVar(&serverAddress, "a", parseServerAddress(), "Server address is not specified.")
+}
+
 func main() {
+	flag.Parse()
 	router := router.SetupRouter()
-	serverAddress, ok := os.LookupEnv("SERVER_ADDRESS")
-	if !ok {
-		serverAddress = ":8080"
-	}
 	s := &http.Server{
 		Addr:           serverAddress,
 		Handler:        router,
@@ -22,4 +26,12 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 	s.ListenAndServe()
+}
+
+func parseServerAddress() string {
+	serverAddress, ok := os.LookupEnv("SERVER_ADDRESS")
+	if !ok {
+		serverAddress = ":8080"
+	}
+	return serverAddress
 }

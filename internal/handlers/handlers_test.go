@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"net/url"
-	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -41,12 +40,8 @@ func TestParseBaseURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Setenv(BaseURLEnvName, tt.want.envVar)
-
-			parsedURL := parseBaseURL()
+			parsedURL := parseBaseURL(tt.want.envVar)
 			assert.Equal(t, tt.want.expectedURL, parsedURL.String())
-
-			os.Unsetenv(BaseURLEnvName)
 		})
 	}
 }

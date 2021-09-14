@@ -2,6 +2,7 @@ package storage
 
 import (
 	"encoding/gob"
+	"flag"
 	"os"
 )
 
@@ -20,6 +21,7 @@ var fileStore *FileStore
 
 func init() {
 	fileStore = &FileStore{FileName: parseFileStoragePath()}
+	flag.StringVar(&fileStore.FileName, "f", "/tmp/godb", "path to file store")
 	db, _ = fileStore.LoadFromDisk()
 }
 

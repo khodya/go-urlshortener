@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"flag"
 	"io"
 	"net/http"
 	"net/url"
@@ -24,11 +25,15 @@ const (
 var baseURL url.URL
 
 func init() {
-	baseURL = parseBaseURL()
+	baseURL = parseBaseURL(os.Getenv(BaseURLEnvName))
+	flag.Func("b", "base url flag", func(flagValue string) error {
+		baseURL = parseBaseURL(flagValue)
+		return nil
+	})
 }
 
-func parseBaseURL() url.URL {
-	baseURL, err := url.Parse(os.Getenv(BaseURLEnvName))
+func parseBaseURL(urlToParse string) url.URL {
+	baseURL, err := url.Parse(urlToParse)
 	if err != nil || (*baseURL == url.URL{}) {
 		baseURL, _ = url.Parse(DefaultBaseURL)
 	}
