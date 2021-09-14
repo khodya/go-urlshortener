@@ -98,25 +98,25 @@ jobs:
               -server-port=$SERVER_PORT \
               -file-storage-path=$TEMP_FILE
 
-      - name: "Code increment #8"
-        if: always()
-        run: |
-          shortenertest -test.v -test.run=^TestIteration8$ -source-path=. -binary-path=cmd/shortener/shortener
+      # - name: "Code increment #8"
+      #   if: always()
+      #   run: |
+      #     shortenertest -test.v -test.run=^TestIteration8$ -source-path=. -binary-path=cmd/shortener/shortener
 
-      - name: "Code increment #9"
-        if: always()
-        run: |
-          shortenertest -test.v -test.run=^TestIteration9$ -source-path=. -binary-path=cmd/shortener/shortener
+      # - name: "Code increment #9"
+      #   if: always()
+      #   run: |
+      #     shortenertest -test.v -test.run=^TestIteration9$ -source-path=. -binary-path=cmd/shortener/shortener
 
-      - name: "Code increment #10"
-        if: always()
-        run: |
-          shortenertest -test.v -test.run=^TestIteration10$ \
-              -source-path=. \
-              -binary-path=cmd/shortener/shortener \
-              -database-dsn=postgres://postgres:postgres@postgres:5432/praktikum
+      # - name: "Code increment #10"
+      #   if: always()
+      #   run: |
+      #     shortenertest -test.v -test.run=^TestIteration10$ \
+      #         -source-path=. \
+      #         -binary-path=cmd/shortener/shortener \
+      #         -database-dsn=postgres://postgres:postgres@postgres:5432/praktikum
 
-      - name: "Code increment #11"
-        if: always()
-        run: |
-          echo "Автотесты для кодового инкремента №11 будут доступны позднее" && exit 1
+      # - name: "Code increment #11"
+      #   if: always()
+      #   run: |
+      #     echo "Автотесты для кодового инкремента №11 будут доступны позднее" && exit 1
