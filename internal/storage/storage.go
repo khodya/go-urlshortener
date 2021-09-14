@@ -20,6 +20,7 @@ var db DB
 var fileStore *FileStore
 
 func init() {
+	fileStore = &FileStore{}
 	flag.StringVar(&fileStore.FileName, "f", parseFileStoragePath(), "path to file store")
 	db, _ = fileStore.LoadFromDisk()
 }
