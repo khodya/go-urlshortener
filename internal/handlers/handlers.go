@@ -72,12 +72,12 @@ func Shorten(c *gin.Context) {
 	defer c.Request.Body.Close()
 	body, err := io.ReadAll(c.Request.Body)
 	if err != nil || len(body) == 0 {
-		c.JSON(http.StatusBadRequest, struct{}{})
+		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
 	var requestBody myRequestBody
 	if err := json.Unmarshal(body, &requestBody); err != nil || len(requestBody.URLText) == 0 {
-		c.JSON(http.StatusBadRequest, struct{}{})
+		c.JSON(http.StatusBadRequest, nil)
 		return
 	}
 	path := shortener.Encode([]byte(requestBody.URLText))
