@@ -24,7 +24,8 @@ const (
 var fileStore *FileStore
 
 func init() {
-	fileStore = &FileStore{}
+	fileStore = newFileStore()
+	fileStore.Links = make(Table)
 	flag.StringVar(&fileStore.fileName, "f", parseFileStoragePath(), "path to file store")
 	fileStore.LoadFromDisk()
 }
@@ -45,6 +46,12 @@ func Put(key, value string) {
 func Get(key string) (string, bool) {
 	v, ok := fileStore.Links[key]
 	return v, ok
+}
+
+func newFileStore() *FileStore {
+	fs := &FileStore{}
+	fileStore.Links = make(Table)
+	return fs
 }
 
 func (fs *FileStore) SaveOnDisk() error {
