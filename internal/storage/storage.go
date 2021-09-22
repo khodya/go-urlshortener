@@ -58,8 +58,8 @@ func PutUser(user, shortURLPath string) {
 	fileStore.SaveOnDisk()
 }
 
-func GetUser(userId string) ([]string, bool) {
-	links, ok := fileStore.Users[userId]
+func GetUser(userID string) ([]string, bool) {
+	links, ok := fileStore.Users[userID]
 	return links, ok
 }
 
