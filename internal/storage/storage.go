@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type DB map[string]string
+type Table map[string]string
 
 type FileStore struct {
 	FileName string
@@ -16,7 +16,7 @@ const (
 	FileStorePathEnvName = "FILE_STORAGE_PATH"
 )
 
-var db DB
+var db Table
 var fileStore *FileStore
 
 func init() {
@@ -43,7 +43,7 @@ func Get(key string) (string, bool) {
 	return v, ok
 }
 
-func (fs *FileStore) SaveOnDisk(db DB) error {
+func (fs *FileStore) SaveOnDisk(db Table) error {
 	file, err := os.OpenFile(fs.FileName, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		return err
@@ -52,8 +52,8 @@ func (fs *FileStore) SaveOnDisk(db DB) error {
 	return gob.NewEncoder(file).Encode(db)
 }
 
-func (fs *FileStore) LoadFromDisk() (DB, error) {
-	db := make(DB)
+func (fs *FileStore) LoadFromDisk() (Table, error) {
+	db := make(Table)
 	file, err := os.OpenFile(fs.FileName, os.O_RDONLY|os.O_CREATE, 0777)
 	if err != nil {
 		return db, err
@@ -61,7 +61,7 @@ func (fs *FileStore) LoadFromDisk() (DB, error) {
 	defer file.Close()
 	err = gob.NewDecoder(file).Decode(&db)
 	if err != nil {
-		return make(DB), err
+		return make(Table), err
 	}
 	return db, nil
 }
