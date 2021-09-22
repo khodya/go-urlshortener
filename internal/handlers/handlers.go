@@ -101,12 +101,12 @@ func Shorten(c *gin.Context) {
 func GetURLsByUser(c *gin.Context) {
 	userId, err := c.Cookie("user")
 	if err != nil {
-		c.Status(http.StatusNoContent)
+		c.JSON(http.StatusNoContent, nil)
 		return
 	}
 	links, ok := storage.GetUser(userId)
 	if !ok {
-		c.Status(http.StatusNoContent)
+		c.JSON(http.StatusNoContent, nil)
 		return
 	}
 
