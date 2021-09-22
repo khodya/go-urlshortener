@@ -21,13 +21,12 @@ const (
 	FileStorePathEnvName = "FILE_STORAGE_PATH"
 )
 
-var db Table
 var fileStore *FileStore
 
 func init() {
 	fileStore = &FileStore{}
 	flag.StringVar(&fileStore.fileName, "f", parseFileStoragePath(), "path to file store")
-	db, _ = fileStore.LoadFromDisk()
+	fileStore.LoadFromDisk()
 }
 
 func parseFileStoragePath() string {
@@ -39,34 +38,33 @@ func parseFileStoragePath() string {
 }
 
 func Put(key, value string) {
-	db[key] = value
-	fileStore.SaveOnDisk(db)
+	fileStore.Links[key] = value
+	fileStore.SaveOnDisk()
 }
 
 func Get(key string) (string, bool) {
-	v, ok := db[key]
+	v, ok := fileStore.Links[key]
 	return v, ok
 }
 
-func (fs *FileStore) SaveOnDisk(db Table) error {
+func (fs *FileStore) SaveOnDisk() error {
 	file, err := os.OpenFile(fs.fileName, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	return gob.NewEncoder(file).Encode(db)
+	return gob.NewEncoder(file).Encode(*fs)
 }
 
-func (fs *FileStore) LoadFromDisk() (Table, error) {
-	db := make(Table)
+func (fs *FileStore) LoadFromDisk() error {
 	file, err := os.OpenFile(fs.fileName, os.O_RDONLY|os.O_CREATE, 0777)
 	if err != nil {
-		return db, err
+		return err
 	}
 	defer file.Close()
-	err = gob.NewDecoder(file).Decode(&db)
+	err = gob.NewDecoder(file).Decode(fs)
 	if err != nil {
-		return make(Table), err
+		return err
 	}
-	return db, nil
+	return nil
 }
