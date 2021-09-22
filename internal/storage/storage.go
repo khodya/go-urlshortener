@@ -25,8 +25,8 @@ var db Table
 var fileStore *FileStore
 
 func init() {
-	fileName := flag.String("f", parseFileStoragePath(), "path to file store")
-	fileStore = &FileStore{fileName: *fileName}
+	fileStore = &FileStore{}
+	flag.StringVar(&fileStore.fileName, "f", parseFileStoragePath(), "path to file store")
 	db, _ = fileStore.LoadFromDisk()
 }
 
