@@ -37,13 +37,13 @@ func parseFileStoragePath() string {
 	return name
 }
 
-func Put(key, value string) {
-	fileStore.Links[key] = value
+func Put(shortURLPath, originalURL string) {
+	fileStore.Links[shortURLPath] = originalURL
 	fileStore.SaveOnDisk()
 }
 
-func Get(key string) (string, bool) {
-	v, ok := fileStore.Links[key]
+func Get(shortURLPath string) (string, bool) {
+	v, ok := fileStore.Links[shortURLPath]
 	return v, ok
 }
 
