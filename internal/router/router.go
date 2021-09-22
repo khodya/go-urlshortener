@@ -23,7 +23,9 @@ func Cookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("user")
 		if err != nil || len(cookie) == 0 {
+			userID := auth.NewUserID()
 			c.SetCookie("user", auth.NewUserID(), 300, "", "", false, false)
+			c.Set("user", userID)
 		}
 		c.Next()
 	}

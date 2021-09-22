@@ -53,6 +53,12 @@ func Fold(c *gin.Context) {
 	userID, err := c.Cookie("user")
 	if err == nil {
 		storage.PutUser(userID, path)
+	} else {
+		userIDObj, ok := c.Get("user")
+		value, okt := userIDObj.(string)
+		if ok && okt {
+			storage.PutUser(value, path)
+		}
 	}
 	c.String(http.StatusCreated, "%s", shortURL)
 }
@@ -90,6 +96,12 @@ func Shorten(c *gin.Context) {
 	userID, err := c.Cookie("user")
 	if err == nil {
 		storage.PutUser(userID, path)
+	} else {
+		userIDObj, ok := c.Get("user")
+		value, okt := userIDObj.(string)
+		if ok && okt {
+			storage.PutUser(value, path)
+		}
 	}
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
