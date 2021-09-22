@@ -49,7 +49,7 @@ func Get(key string) (string, bool) {
 }
 
 func (fs *FileStore) SaveOnDisk(db Table) error {
-	file, err := os.OpenFile(fs.FileName, os.O_WRONLY|os.O_CREATE, 0777)
+	file, err := os.OpenFile(fs.fileName, os.O_WRONLY|os.O_CREATE, 0777)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func (fs *FileStore) SaveOnDisk(db Table) error {
 
 func (fs *FileStore) LoadFromDisk() (Table, error) {
 	db := make(Table)
-	file, err := os.OpenFile(fs.FileName, os.O_RDONLY|os.O_CREATE, 0777)
+	file, err := os.OpenFile(fs.fileName, os.O_RDONLY|os.O_CREATE, 0777)
 	if err != nil {
 		return db, err
 	}
