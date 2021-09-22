@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-func NewUserId() string {
+func NewUserID() string {
 	b := make([]byte, 16)
 	_, err := rand.Read(b)
 	if err != nil {

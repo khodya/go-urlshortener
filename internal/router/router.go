@@ -22,7 +22,7 @@ func Cookie() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("user")
 		if err != nil || len(cookie) == 0 {
-			c.SetCookie("user", auth.NewUserId(), 300, "", "", false, false)
+			c.SetCookie("user", auth.NewUserID(), 300, "", "", false, false)
 		}
 		c.Next()
 	}
