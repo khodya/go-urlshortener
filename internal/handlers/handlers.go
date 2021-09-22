@@ -50,9 +50,9 @@ func Fold(c *gin.Context) {
 	path := shortener.Encode(url)
 	storage.Put(path, string(url))
 	shortURL := composeURL(baseURL, path)
-	userId, err := c.Cookie("user")
+	userID, err := c.Cookie("user")
 	if err == nil {
-		storage.PutUser(userId, path)
+		storage.PutUser(userID, path)
 	}
 	c.String(http.StatusCreated, "%s", shortURL)
 }
@@ -99,12 +99,12 @@ func Shorten(c *gin.Context) {
 }
 
 func GetURLsByUser(c *gin.Context) {
-	userId, err := c.Cookie("user")
+	userID, err := c.Cookie("user")
 	if err != nil {
 		c.JSON(http.StatusNoContent, nil)
 		return
 	}
-	links, ok := storage.GetUser(userId)
+	links, ok := storage.GetUser(userID)
 	if !ok {
 		c.JSON(http.StatusNoContent, nil)
 		return
