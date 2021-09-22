@@ -50,6 +50,10 @@ func Fold(c *gin.Context) {
 	path := shortener.Encode(url)
 	storage.Put(path, string(url))
 	shortURL := composeURL(baseURL, path)
+	userId, err := c.Cookie("user")
+	if err == nil {
+		storage.PutUser(userId, path)
+	}
 	c.String(http.StatusCreated, "%s", shortURL)
 }
 
@@ -83,6 +87,10 @@ func Shorten(c *gin.Context) {
 	path := shortener.Encode([]byte(requestBody.URLText))
 	storage.Put(path, requestBody.URLText)
 	shortURL := composeURL(baseURL, path)
+	userId, err := c.Cookie("user")
+	if err == nil {
+		storage.PutUser(userId, path)
+	}
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
 	}{
