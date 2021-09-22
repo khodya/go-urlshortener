@@ -24,7 +24,7 @@ func Cookie() gin.HandlerFunc {
 		cookie, err := c.Cookie("user")
 		if err != nil || len(cookie) == 0 {
 			userID := auth.NewUserID()
-			c.SetCookie("user", auth.NewUserID(), 300, "", "", false, false)
+			c.SetCookie("user", userID, 300, "", "", false, false)
 			c.Set("user", userID)
 		}
 		c.Next()

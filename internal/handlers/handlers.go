@@ -54,10 +54,9 @@ func Fold(c *gin.Context) {
 	if err == nil {
 		storage.PutUser(userID, path)
 	} else {
-		userIDObj, ok := c.Get("user")
-		value, okt := userIDObj.(string)
-		if ok && okt {
-			storage.PutUser(value, path)
+		userIDParam, ok := c.Get("user")
+		if ok {
+			storage.PutUser(userIDParam.(string), path)
 		}
 	}
 	c.String(http.StatusCreated, "%s", shortURL)
@@ -97,10 +96,9 @@ func Shorten(c *gin.Context) {
 	if err == nil {
 		storage.PutUser(userID, path)
 	} else {
-		userIDObj, ok := c.Get("user")
-		value, okt := userIDObj.(string)
-		if ok && okt {
-			storage.PutUser(value, path)
+		userIDParam, ok := c.Get("user")
+		if ok {
+			storage.PutUser(userIDParam.(string), path)
 		}
 	}
 	c.IndentedJSON(http.StatusCreated, struct {
