@@ -87,9 +87,9 @@ func Shorten(c *gin.Context) {
 	path := shortener.Encode([]byte(requestBody.URLText))
 	storage.Put(path, requestBody.URLText)
 	shortURL := composeURL(baseURL, path)
-	userId, err := c.Cookie("user")
+	userID, err := c.Cookie("user")
 	if err == nil {
-		storage.PutUser(userId, path)
+		storage.PutUser(userID, path)
 	}
 	c.IndentedJSON(http.StatusCreated, struct {
 		Result string `json:"result"`
