@@ -11,6 +11,7 @@ type Table map[string]string
 
 type Store struct {
 	Links Table
+	Users map[string][]string
 }
 
 type FileStore struct {
@@ -48,9 +49,18 @@ func Get(shortURLPath string) (string, bool) {
 	return v, ok
 }
 
+func PutUser(user, shortURLPath string) {
+	slice, ok := fileStore.Users[user]
+	if !ok {
+		fileStore.Users[user] = make([]string, 0)
+	}
+	fileStore.Users[user] = append(slice, shortURLPath)
+}
+
 func newFileStore() *FileStore {
 	fs := new(FileStore)
 	fs.Links = make(Table)
+	fs.Users = make(map[string][]string)
 	return fs
 }
 
