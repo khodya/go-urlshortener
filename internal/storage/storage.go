@@ -55,6 +55,12 @@ func PutUser(user, shortURLPath string) {
 		fileStore.Users[user] = make([]string, 0)
 	}
 	fileStore.Users[user] = append(slice, shortURLPath)
+	fileStore.SaveOnDisk()
+}
+
+func GetUser(userId string) ([]string, bool) {
+	links, ok := fileStore.Users[userId]
+	return links, ok
 }
 
 func newFileStore() *FileStore {

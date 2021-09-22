@@ -98,6 +98,35 @@ func Shorten(c *gin.Context) {
 	})
 }
 
+func GetURLsByUser(c *gin.Context) {
+	userId, err := c.Cookie("user")
+	if err != nil {
+		c.Status(http.StatusNoContent)
+		return
+	}
+	links, ok := storage.GetUser(userId)
+	if !ok {
+		c.Status(http.StatusNoContent)
+		return
+	}
+
+	type response struct {
+		ShortURL    string `json:"short_url"`
+		OriginalURL string `json:"original_url"`
+	}
+
+	records := make([]response, 0)
+	for _, shortURLPath := range links {
+		originalURL, _ := storage.Get(shortURLPath)
+		record := response{
+			ShortURL:    composeURL(baseURL, shortURLPath),
+			OriginalURL: originalURL,
+		}
+		records = append(records, record)
+	}
+	c.IndentedJSON(http.StatusOK, records)
+}
+
 func composeURL(baseURL url.URL, path string) string {
 	url := baseURL
 	url.Path = path
