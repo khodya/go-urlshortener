@@ -8,7 +8,12 @@ import (
 
 type Table map[string]string
 
+type Store struct {
+	Links Table
+}
+
 type FileStore struct {
+	Store
 	FileName string
 }
 
