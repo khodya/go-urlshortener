@@ -14,7 +14,7 @@ type Store struct {
 
 type FileStore struct {
 	Store
-	FileName string
+	fileName string
 }
 
 const (
@@ -25,8 +25,8 @@ var db Table
 var fileStore *FileStore
 
 func init() {
-	fileStore = &FileStore{}
-	flag.StringVar(&fileStore.FileName, "f", parseFileStoragePath(), "path to file store")
+	fileName := flag.String("f", parseFileStoragePath(), "path to file store")
+	fileStore = &FileStore{fileName: *fileName}
 	db, _ = fileStore.LoadFromDisk()
 }
 
