@@ -68,11 +68,9 @@ func (fs *FileStore) LoadFromDisk() error {
 		return err
 	}
 	defer file.Close()
-	newFs := newFileStore()
-	err = gob.NewDecoder(file).Decode(newFs)
+	err = gob.NewDecoder(file).Decode(fs)
 	if err != nil {
 		return err
 	}
-	fs.Links = newFs.Links
 	return nil
 }
