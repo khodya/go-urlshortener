@@ -48,8 +48,8 @@ func Get(key string) (string, bool) {
 }
 
 func newFileStore() *FileStore {
-	fs := &FileStore{}
-	fileStore.Links = make(Table)
+	fs := new(FileStore)
+	fs.Links = make(Table)
 	return fs
 }
 
