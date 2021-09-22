@@ -137,6 +137,14 @@ func GetURLsByUser(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, records)
 }
 
+func PingDB(c *gin.Context) {
+	if storage.PingDB() {
+		c.Status(http.StatusOK)
+	} else {
+		c.Status(http.StatusInternalServerError)
+	}
+}
+
 func composeURL(baseURL url.URL, path string) string {
 	url := baseURL
 	url.Path = path

@@ -16,6 +16,7 @@ func SetupRouter() *gin.Engine {
 	r.POST("/", handlers.Fold)
 	r.POST("/api/shorten", handlers.Shorten)
 	r.GET("/user/urls", handlers.GetURLsByUser)
+	r.GET("/ping", handlers.PingDB)
 	return r
 }
 

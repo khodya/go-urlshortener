@@ -1,10 +1,13 @@
 package storage
 
 import (
+	"database/sql"
 	"encoding/gob"
 	"flag"
 	"log"
 	"os"
+
+	_ "github.com/lib/pq"
 )
 
 type Table map[string]string
@@ -21,13 +24,17 @@ type FileStore struct {
 
 const (
 	FileStorePathEnvName = "FILE_STORAGE_PATH"
+	DBConnectionString   = "postgresql://localhost"
 )
 
 var fileStore *FileStore
+var databaseDSN string = ""
 
 func init() {
 	fileStore = newFileStore()
 	flag.StringVar(&fileStore.fileName, "f", parseFileStoragePath(), "path to file store")
+	flag.StringVar(&databaseDSN, "d", parseDatabaseDSN(), "postgress connection string")
+	log.Println("connection string:", databaseDSN)
 	fileStore.LoadFromDisk()
 }
 
@@ -37,6 +44,14 @@ func parseFileStoragePath() string {
 		return "/tmp/godb" // default file storage path
 	}
 	return name
+}
+
+func parseDatabaseDSN() string {
+	value, ok := os.LookupEnv("DATABASE_DSN")
+	if !ok {
+		return DBConnectionString
+	}
+	return value
 }
 
 func Put(shortURLPath, originalURL string) {
@@ -61,6 +76,15 @@ func PutUser(user, shortURLPath string) {
 func GetUser(userID string) ([]string, bool) {
 	links, ok := fileStore.Users[userID]
 	return links, ok
+}
+
+func PingDB() bool {
+	db, err := sql.Open("postgres", databaseDSN)
+	if err != nil {
+		log.Println("Failed DB ping")
+	}
+	defer db.Close()
+	return err == nil
 }
 
 func newFileStore() *FileStore {
