@@ -34,7 +34,6 @@ func init() {
 	fileStore = newFileStore()
 	flag.StringVar(&fileStore.fileName, "f", parseFileStoragePath(), "path to file store")
 	flag.StringVar(&databaseDSN, "d", parseDatabaseDSN(), "postgress connection string")
-	flag.Parse()
 	log.Println("connection string:", databaseDSN)
 	fileStore.LoadFromDisk()
 }
